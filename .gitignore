@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+# Project
+notes.txt
+myadventures_env/
+myadventures/static
