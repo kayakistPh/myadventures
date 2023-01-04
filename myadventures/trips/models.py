@@ -25,8 +25,8 @@ class CombinedTrip(models.Model):
         """String for representing the Model object."""
         return self.name
     
-class Participents(models.Model):
-    """Model representing Participents."""
+class Participants(models.Model):
+    """Model representing Participants."""
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
@@ -41,6 +41,15 @@ class Participents(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.last_name}, {self.first_name}'
+
+class duration_log(models.Model):
+    """Model for logging durations i.e. for 1000 hours
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this particular trip')
+    participants = models.ManyToManyField('Participants', null=True, blank=True)
+    activity = models.ManyToManyField('Activity')
+    duration = models.DurationField(help_text='Time you wish to log')
+
     
 class Trip(models.Model):
     """Model representing a specific trip"""
@@ -48,13 +57,13 @@ class Trip(models.Model):
     name = models.CharField(max_length=200, help_text="Enter a name for the trip")
     combined_trip = models.ForeignKey('CombinedTrip', on_delete=models.RESTRICT, null=True, blank=True)
     date = models.DateField(null=True, blank=True)
-    # Author is a string rather than an object because it hasn't been declared yet in the file
     activity = models.ManyToManyField('Activity')
-    participents = models.ManyToManyField('Participents', null=True, blank=True)
+    participants = models.ManyToManyField('Participants', null=True, blank=True)
+    duration = models.DurationField(help_text='Time you wish to log', null=True, blank=True)
     summary = models.TextField(max_length=1000, help_text='Enter a brief description of the trip', blank=True, null=True)
     SEASON_LIST = (
         ('s', 'Summer'),
-        ('a', 'Autaum'),
+        ('a', 'Autumn'),
         ('w', 'Winter'),
         ('p', 'Spring'),
     )
